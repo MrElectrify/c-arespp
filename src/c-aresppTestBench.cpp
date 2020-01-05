@@ -35,7 +35,7 @@ int main()
 			for (const std::string& IP : IPs)
 				ss << IP << '\n';
 
-			printf(ss.str().c_str());
+			printf("%s", ss.str().c_str());
 		});
 
 	resolver.AsyncResolve("www.google.com",
@@ -52,7 +52,7 @@ int main()
 			for (const std::string& IP : IPs)
 				ss << IP << '\n';
 
-			printf(ss.str().c_str());
+			printf("%s", ss.str().c_str());
 		});
 
 	resolver.AsyncResolve("www.github.com",
@@ -69,7 +69,7 @@ int main()
 			for (const std::string& IP : IPs)
 				ss << IP << '\n';
 
-			printf(ss.str().c_str());
+			printf("%s", ss.str().c_str());
 		});
 
 	resolver.AsyncResolve("www.timeanddate.com",
@@ -86,14 +86,14 @@ int main()
 			for (const std::string& IP : IPs)
 				ss << IP << '\n';
 
-			printf(ss.str().c_str());
+			printf("%s", ss.str().c_str());
 		});
 
 	resolver.Run();
 
 	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
 
-	printf("Resolution took %d ms\n", std::chrono::duration_cast<std::chrono::milliseconds>(end  - start));
+	printf("Resolution took %lld ms\n", std::chrono::duration_cast<std::chrono::milliseconds>(end  - start).count());
 
 #ifdef USE_WINSOCK
 	WSACleanup();
