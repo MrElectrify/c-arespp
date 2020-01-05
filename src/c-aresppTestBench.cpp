@@ -93,7 +93,7 @@ int main()
 
 	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
 
-	printf("Resolution took %lld ms\n", std::chrono::duration_cast<std::chrono::milliseconds>(end  - start).count());
+	printf("Resolution took %ul ms\n", static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::milliseconds>(end  - start).count()));
 
 #ifdef USE_WINSOCK
 	WSACleanup();
