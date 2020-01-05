@@ -1,9 +1,9 @@
-#ifndef LIBCURLPP_ASYNC_WEBCLIENT_H_
-#define LIBCURLPP_ASYNC_WEBCLIENT_H_
+#ifndef LIBCARESPP_RESOLVER_H_
+#define LIBCARESPP_RESOLVER_H_
 
 /*
- *  CURLPP-Async WebClient
- *  12/29/19 20:09
+ *  C-ARESPP Resolver
+ *  1/4/20 22:49
  */
 
 // ARES
