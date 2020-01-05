@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="c-arespp.cpp">
+    <ClCompile Include="..\..\src\c-arespp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
