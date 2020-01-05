@@ -20,7 +20,7 @@ namespace CARESPP
 {
     // Resolver is a wrapper for C-ARES, which handles static initialization and deinitialization.
     // All queries are processed asynchronously, and call a callback when finished, on the same thread
-    // that runs Resolver::Run().
+    // that runs Resolver::Run(). WSA MUST BE INITIALIZED OUTSIDE BEFORE USAGE
     class Resolver
     {
     public:
@@ -35,15 +35,18 @@ namespace CARESPP
         Resolver(const Resolver& other) = delete;
         Resolver& operator=(const Resolver& other) = delete;
 
-        // Cancels any async operations and calls the handler with
+        // Cancels any async operations and calls the handler with failure
         ~Resolver() noexcept;
 
-        // Starts an asynchronous resolve operation
+        // Asynchronously resolves a hostname with callback which will be called after the resolution
+        void AsyncResolve(std::string hostName, ResolveCallback_t resolveCallback) noexcept;
 
         // Runs the resolver until all queries have been resolved. Calls all
         // callbacks when the transfer either completes or fails
-        void Run();
+        void Run() noexcept;
     private:
+        static void HandleResolve(void* arg, int status, int timeouts, hostent* hostent) noexcept;
+
         ares_channel m_ares;
 
         static std::atomic_size_t s_refCount;
