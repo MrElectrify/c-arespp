@@ -19,13 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\c-arespp.cpp" />
+    <ClCompile Include="..\..\src\c-aresppTestBench.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{8869410B-7156-4C49-A354-E900164E0807}</ProjectGuid>
     <RootNamespace>carespp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>c-aresppTestBench</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -75,25 +76,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>..\..\dependencies\cares\;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dependencies\c-ares\;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\dependencies\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>..\..\dependencies\cares\;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dependencies\c-ares\;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\dependencies\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>..\..\dependencies\cares\;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dependencies\c-ares\;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\dependencies\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>..\..\dependencies\cares\;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\dependencies\c-ares\;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\dependencies\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
