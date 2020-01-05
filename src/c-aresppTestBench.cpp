@@ -33,12 +33,11 @@
 #include "ares_nowarn.h"
 
 static void callback(void* arg, int status, int timeouts, struct hostent* host);
-static void usage(void);
 
 int main(int argc, char** argv)
 {
     ares_channel channel;
-    int status, nfds, c, addr_family = AF_INET;
+    int status, nfds, addr_family = AF_INET;
     fd_set read_fds, write_fds;
     struct timeval* tvp, tv;
     struct in_addr addr4;
@@ -142,10 +141,4 @@ static void callback(void* arg, int status, int timeouts, struct hostent* host)
 #endif
         puts("");
     }
-}
-
-static void usage(void)
-{
-    fprintf(stderr, "usage: ahost [-t {a|aaaa|u}] {host|addr} ...\n");
-    exit(1);
 }
