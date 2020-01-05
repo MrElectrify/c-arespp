@@ -3,6 +3,13 @@
 // STL
 #include <stdexcept>
 
+// C-ARES
+#include <ares_setup.h>
+
+#ifndef _WIN32
+#include <netdb.h>
+#endif
+
 using CARESPP::Resolver;
 
 std::atomic_size_t Resolver::s_refCount = 0;

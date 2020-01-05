@@ -1,2 +1,2 @@
 [ ! -d "bin/" ] && mkdir bin
-g++ --std=c++17 -DCARES_STATICLIB -DHAVE_CONFIG_H=1 -Wall -I../dependencies/c-areslinux/ ../src/c-aresppTestBench.cpp -lcares -obin/c-arespp
+g++ --std=c++17 -DHAVE_CONFIG_H=1 -Wall -Llib/ -I../include/ -I../dependencies/c-areslinux/ ../src/c-aresppTestBench.cpp -Wl,-Bstatic -lc-arespp -lcares -Wl,-Bdynamic -obin/c-arespp
