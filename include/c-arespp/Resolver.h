@@ -70,7 +70,7 @@ namespace CARESPP
 					std::lock_guard insGuard(mutex);
 					while (midResolveInsertionQueue.empty() == false)
 					{
-						const MidResolveInsertionQueue_t::value_type& front = midResolveInsertionQueue.front();
+						const typename MidResolveInsertionQueue_t::value_type& front = midResolveInsertionQueue.front();
 						AsyncResolve(std::move(front.first),
 							std::move(front.second));
 						midResolveInsertionQueue.pop();
