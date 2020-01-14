@@ -13,18 +13,18 @@
 // STL
 #include <atomic>
 #include <functional>
-#include <string>
-#include <vector>
-
 #include <mutex>
 #include <queue>
+#include <string>
 #include <utility>
+#include <vector>
+
 
 namespace CARESPP
 {
     // Resolver is a wrapper for C-ARES, which handles static initialization and deinitialization.
     // All queries are processed asynchronously, and call a callback when finished, on the same thread
-    // that runs Resolver::Run(). WSA MUST BE INITIALIZED OUTSIDE BEFORE USAGE
+    // that runs Resolver::Run(). WSA MUST BE INITIALIZED OUTSIDE BEFORE USAGE.
     class Resolver
     {
     public:
@@ -42,58 +42,19 @@ namespace CARESPP
         // Cancels any async operations and calls the handler with failure
         ~Resolver() noexcept;
 
-        // Asynchronously resolves a hostname with callback which will be called after the resolution
+        // Asynchronously resolves a hostname with callback which will be called after the resolution.
+        // This may be called from other threads than the thread running the loop
         void AsyncResolve(std::string hostName, ResolveCallback_t resolveCallback) noexcept;
 
         // Runs the resolver until all queries have been resolved. Calls all
-        // callbacks when the transfer either completes or fails
+        // callbacks when the transfer either completes or fails. Resolver must not
+        // be moved, destructed, or go out of scope while Run() is in progress
         void Run() noexcept;
-		// Runs all queued asynchronous operations, adding operations from a mutex-protected 
-		// queue if they appear before the transfor or mid-transfer. Returns when all are complete 
-		// and the queue is empty
-		// MidResolveInsertionQueue_t example: std::queue<std::pair<std::string, ResolveCallback_t>>
-		// A queue of void returning pairs of std::string hostName/ResolveCallback_t resolveCallback, 
-		// with front() and pop()
-		// Mutex_t example: std::mutex
-		// A mutex with lock() and unlock()
-		template<typename MidResolveInsertionQueue_t, typename Mutex_t>
-		void Run(MidResolveInsertionQueue_t& midResolveInsertionQueue, Mutex_t& mutex)
-		{
-			// this implementation is copied and modified from ahost
-			int nfds;
-			fd_set read_fds, write_fds;
-			timeval tv, * tvp;
-			while (true)
-			{
-				// empty out the insertion queue
-				{
-					std::lock_guard insGuard(mutex);
-					while (midResolveInsertionQueue.empty() == false)
-					{
-						const typename MidResolveInsertionQueue_t::value_type& front = midResolveInsertionQueue.front();
-						AsyncResolve(std::move(front.first),
-							std::move(front.second));
-						midResolveInsertionQueue.pop();
-					}
-				}
-
-				int res;
-				FD_ZERO(&read_fds);
-				FD_ZERO(&write_fds);
-				nfds = ares_fds(m_ares, &read_fds, &write_fds);
-				if (nfds == 0)
-					break;
-				tvp = ares_timeout(m_ares, NULL, &tv);
-				res = select(nfds, &read_fds, &write_fds, NULL, tvp);
-				if (res == -1)
-					break;
-				ares_process(m_ares, &read_fds, &write_fds);
-			}
-		}
     private:
         static void HandleResolve(void* arg, int status, int timeouts, hostent* hostent) noexcept;
 
         ares_channel m_ares;
+        std::mutex m_aresMutex;
 
         static std::atomic_size_t s_refCount;
     };

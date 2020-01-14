@@ -67,15 +67,20 @@ void Resolver::AsyncResolve(std::string hostName, ResolveCallback_t resolveCallb
 	// try to convert it in case it is an IP
 	if (ares_inet_pton(AF_INET, pPair->first.c_str(), &addr4) == 1)
 	{
+		std::lock_guard aresLock(m_aresMutex);
 		ares_gethostbyaddr(m_ares, &addr4, sizeof(addr4), AF_INET, &Resolver::HandleResolve, pPair);
 	}
 	else
 	{
+		std::lock_guard aresLock(m_aresMutex);
 		ares_gethostbyname(m_ares, pPair->first.c_str(), AF_INET, &Resolver::HandleResolve, pPair);
 	}
 }
 
-// this implementation is copied and modified from ahost
+// this implementation is copied and modified from ahost.
+// https://c-ares.haxx.se/mail/c-ares-archive-2008-05/0039.shtml
+// as long as the channel pointer is only accessed by one thread
+// at a time we are fine
 void Resolver::Run() noexcept
 {
 	int nfds;
@@ -86,14 +91,24 @@ void Resolver::Run() noexcept
 		int res;
 		FD_ZERO(&read_fds);
 		FD_ZERO(&write_fds);
-		nfds = ares_fds(m_ares, &read_fds, &write_fds);
+
+		{
+			std::lock_guard aresLock(m_aresMutex);
+			nfds = ares_fds(m_ares, &read_fds, &write_fds);
+		}
 		if (nfds == 0)
 			break;
-		tvp = ares_timeout(m_ares, NULL, &tv);
+		{
+			std::lock_guard aresLock(m_aresMutex);
+			tvp = ares_timeout(m_ares, NULL, &tv);
+		}
 		res = select(nfds, &read_fds, &write_fds, NULL, tvp);
 		if (res == -1)
 			break;
-		ares_process(m_ares, &read_fds, &write_fds);
+		{
+			std::lock_guard aresLock(m_aresMutex);
+			ares_process(m_ares, &read_fds, &write_fds);
+		}
 	}
 }
 
